@@ -6,9 +6,7 @@ RUN apk update; \
     apk add git; \
     git clone https://github.com/parse-community/parse-server.git -b ${parserelease} /tmp
 WORKDIR /tmp
-#COPY package*.json ./
 RUN npm ci
-#COPY . .
 RUN npm run build
 
 # Release stage
@@ -18,19 +16,20 @@ VOLUME /parse-server/cloud /parse-server/config
 
 WORKDIR /parse-server
 
-COPY --from=build /tmp/package*.json ./
+COPY --from=build --chown=node:node /tmp/package*.json ./
 
 RUN npm ci --production --ignore-scripts
 
-COPY --from=build /tmp/bin bin
-COPY --from=build /tmp/public_html public_html
-COPY --from=build /tmp/views views
-COPY --from=build /tmp/lib lib
+COPY --from=build --chown=node:node /tmp/bin bin
+COPY --from=build --chown=node:node /tmp/public_html public_html
+COPY --from=build --chown=node:node /tmp/views views
+COPY --from=build --chown=node:node /tmp/lib lib
 
-RUN mkdir -p logs && chown -R node: logs
+RUN mkdir -p logs && chown -R node:node logs
 
 ENV PORT=1337
-USER node
 EXPOSE $PORT
+
+USER node
 
 ENTRYPOINT ["node", "./bin/parse-server"]
