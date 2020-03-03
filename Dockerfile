@@ -16,7 +16,7 @@ VOLUME /parse-server/cloud /parse-server/config
 
 WORKDIR /parse-server
 
-COPY --from=build --chown=node:node /tmp/package*.json ./
+COPY --from=build --chown=node:node /tmp2/package*.json ./
 
 RUN npm ci --production --ignore-scripts
 
