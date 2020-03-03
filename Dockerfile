@@ -4,8 +4,8 @@ ARG parserelease=3.6.0
 
 RUN apk update; \
     apk add git; \
-    git clone https://github.com/parse-community/parse-server.git -b ${parserelease} /tmp
-WORKDIR /tmp
+    git clone https://github.com/parse-community/parse-server.git -b ${parserelease} /tmp2
+WORKDIR /tmp2
 RUN npm ci
 RUN npm run build
 
@@ -20,10 +20,10 @@ COPY --from=build --chown=node:node /tmp/package*.json ./
 
 RUN npm ci --production --ignore-scripts
 
-COPY --from=build --chown=node:node /tmp/bin bin
-COPY --from=build --chown=node:node /tmp/public_html public_html
-COPY --from=build --chown=node:node /tmp/views views
-COPY --from=build --chown=node:node /tmp/lib lib
+COPY --from=build --chown=node:node /tmp2/bin bin
+COPY --from=build --chown=node:node /tmp2/public_html public_html
+COPY --from=build --chown=node:node /tmp2/views views
+COPY --from=build --chown=node:node /tmp2/lib lib
 
 RUN mkdir -p logs && chown -R node:node logs
 
