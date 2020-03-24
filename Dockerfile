@@ -8,6 +8,7 @@ RUN apk add --no-cache git; \
     git checkout tags/${parserelease} -b ${parserelease}
 WORKDIR /tmp2
 RUN npm ci
+RUN npm ci parse-smtp-template 
 RUN npm run build
 
 # Release stage
