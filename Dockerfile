@@ -2,9 +2,10 @@
 FROM node:lts-alpine as build
 ARG parserelease=3.6.0
 
-RUN apk update; \
-    apk add git; \
-    git clone https://github.com/parse-community/parse-server.git -b ${parserelease} /tmp2
+RUN apk add --no-cache git; \
+    git clone https://github.com/parse-community/parse-server.git /tmp2; \
+    cd /tmp2; \
+    git checkout tags/${parserelease} -b ${parserelease}
 WORKDIR /tmp2
 RUN npm ci
 RUN npm run build
