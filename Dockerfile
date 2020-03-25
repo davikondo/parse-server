@@ -8,7 +8,7 @@ RUN apk add --no-cache git; \
     git checkout tags/${parserelease} -b ${parserelease}
 WORKDIR /tmp2
 RUN npm ci
-RUN npm ci parse-smtp-template 
+RUN npm i parse-smtp-template 
 RUN npm run build
 
 # Release stage
@@ -21,7 +21,6 @@ WORKDIR /parse-server
 COPY --from=build --chown=node:node /tmp2/package*.json ./
 
 RUN npm ci --production --ignore-scripts
-RUN npm ci parse-smtp-template --production --ignore-scripts
 
 COPY --from=build --chown=node:node /tmp2/bin bin
 COPY --from=build --chown=node:node /tmp2/public_html public_html
